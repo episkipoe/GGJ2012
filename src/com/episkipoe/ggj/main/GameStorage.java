@@ -1,6 +1,7 @@
 package com.episkipoe.ggj.main;
 
 import com.episkipoe.common.Game;
+import com.episkipoe.common.player.MovePlayer;
 
 public class GameStorage implements com.episkipoe.common.GameStorage {
 
@@ -16,13 +17,9 @@ public class GameStorage implements com.episkipoe.common.GameStorage {
 	}
 
 	@Override
-	public void loadRooms() throws Exception {
-
-	}
-
-	@Override
 	public void newGame() throws Exception {
 		Game.switchRoom(MainRoom.class);
+		Game.setMouseMode(new MovePlayer());
 	}
 
 	@Override
