@@ -33,4 +33,5 @@ public class GameStorage implements com.episkipoe.common.GameStorage {
 		if(!loadGame()) newGame(); 
 	}
 
+
 }

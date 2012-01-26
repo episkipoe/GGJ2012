@@ -6,6 +6,7 @@ import com.episkipoe.common.Point;
 import com.episkipoe.common.draw.TextUtils;
 import com.episkipoe.common.interact.BackgroundAction;
 import com.episkipoe.common.rooms.Room;
+import com.episkipoe.common.sound.SoundUtils;
 
 public class MainRoom extends Room {
 	public MainRoom() {
@@ -15,6 +16,7 @@ public class MainRoom extends Room {
 	private class ClickLogo implements Runnable {
 		@Override public void run() {
 			TextUtils.growl(Arrays.asList("Welcome"));
+			SoundUtils.play("victory.wav");
 		}
 	}
 	
