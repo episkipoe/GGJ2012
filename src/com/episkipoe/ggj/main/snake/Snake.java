@@ -1,14 +1,15 @@
 package com.episkipoe.ggj.main.snake;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
 import com.episkipoe.common.Game;
 import com.episkipoe.common.Point;
 import com.episkipoe.common.draw.Drawable;
 import com.episkipoe.common.draw.ImageDrawable;
 import com.episkipoe.common.draw.TextUtils;
+import com.episkipoe.ggj.main.Color;
 import com.episkipoe.ggj.main.Main;
 import com.episkipoe.ggj.main.food.Food;
 import com.episkipoe.ggj.main.rooms.GameOverRoom;
@@ -19,7 +20,9 @@ import com.google.gwt.user.client.Timer;
 public class Snake extends ImageDrawable {
 	private SnakeHead head = new SnakeHead();
 	private SnakeTail tail = new SnakeTail();
-	private Queue<SnakeBody> bodyList = new LinkedList<SnakeBody>();
+	private List<SnakeBody> bodyList = new ArrayList<SnakeBody>();
+	
+	private int sequenceToClear=3;
 	
 	private int sectionsTilNextLevel=4;
 	public int getSectionsTilNextLevel() { return sectionsTilNextLevel; }
@@ -29,7 +32,7 @@ public class Snake extends ImageDrawable {
 		moveTimer = new Timer() {
 	    	@Override public void run() {
 	    		move();
-	    		moveTimer.schedule(80);
+	    		moveTimer.schedule(500);
 	    	}
 		};
 		moveTimer.schedule(500);
@@ -40,11 +43,12 @@ public class Snake extends ImageDrawable {
 	 */
 	public void reset() {
 		bodyList.clear();
-		sectionsTilNextLevel = 5 + Main.level*2;
+		sectionsTilNextLevel = 1 + Main.level*2;
 		int width = new SnakeBody().getWidth();
 		if(width<=0) width = 64; 
 		int x = width*sectionsTilNextLevel;
 		int y = (int) (Game.canvasHeight*0.5);
+		nextMove=moveRight;
 		setLocation(new Point(x, y));
 		head.setLocation(getLocation());
 		for(int i = 0; i < sectionsTilNextLevel; i++) {
@@ -56,7 +60,6 @@ public class Snake extends ImageDrawable {
 		x-=width;
 		tail.setLocation(new Point(x,y));
 		head.setColor(getActiveBody().getColor());
-		System.out.println("reset: " + getActiveBody().getColor().name);
 	}
 
 	public static final int moveDistance=64;
@@ -83,7 +86,7 @@ public class Snake extends ImageDrawable {
 		setLocation(newLoc);
 		head.setLocation(newLoc);
 		head.previousMove=nextMove;
-		for(SnakeBody body : bodyList) {
+		for(SnakeBody body : getBodyParts()) {
 			if(moveVector != null) {
 				newLoc =  body.getLocation().add(moveVector);
 				body.setLocation(newLoc);
@@ -104,7 +107,7 @@ public class Snake extends ImageDrawable {
 		setLocation(newLoc);
 		head.setLocation(newLoc);
 
-		for(SnakeBody body : bodyList) {
+		for(SnakeBody body : getBodyParts()) {
 			newLoc = nextLoc;
 			nextLoc = body.getLocation();
 			body.setLocation(newLoc);
@@ -148,11 +151,37 @@ public class Snake extends ImageDrawable {
 	}
 
 	private SnakeBody getActiveBody() {
-		for(SnakeBody body: bodyList) {
-			if(body.full()) continue;
-			return body;
+		if(bodyList.isEmpty()) return null;
+		return bodyList.get(bodyList.size()-1);
+	}
+	
+	private boolean sequenceComplete() {
+		Color colorToCheck=getActiveBody().getColor();
+		int colorsPresent=0;
+		for(SnakeBody body : getBodyParts()) {
+			if(body.getColor().equals(colorToCheck)) {
+				colorsPresent++;
+			} else {
+				return (colorsPresent>=sequenceToClear);
+			}
 		}
-		return null;
+		return (colorsPresent>=sequenceToClear);
+	}
+	
+	List<SnakeBody> getBodyParts() {
+		List<SnakeBody> parts = new ArrayList<SnakeBody>();
+		for(int i = bodyList.size()-1 ; i >=0 ; i--) parts.add(bodyList.get(i));
+		return parts;
+	}
+	
+	private void removeSequence() {
+		Color colorToRemove=getActiveBody().getColor();
+		List<SnakeBody> toRemove = new ArrayList<SnakeBody>();
+		for(SnakeBody body : getBodyParts()) {
+			if(!body.getColor().equals(colorToRemove)) { break ; }
+			toRemove.add(body);
+		}
+		bodyList.removeAll(toRemove);
 	}
 	
 	private void handleEatingFood(Food food) {
@@ -160,17 +189,24 @@ public class Snake extends ImageDrawable {
 			bodyList.add(new SnakeBody(food.getColor()));
 			return;
 		}
-		SnakeBody activeBody = getActiveBody();
-		if(activeBody.colorMatches(food)) {
-			activeBody.eat(food);
-			food.eat();
+		
+		SnakeBody newSegment = new SnakeBody(food.getColor());
+		newSegment.setLocation(head.getLocation());
+		head.setColor(food.getColor());
+		bodyList.add(newSegment);
+		Point newLoc = head.getLocation().add(nextMove);
+		setLocation(newLoc);
+		head.setLocation(newLoc);
+	
+		if(sequenceComplete()) {
+			removeSequence();
+			if(bodyList.isEmpty()) {
+				Game.switchRoom(NextLevelRoom.class);
+				return;
+			}	
 			head.setColor(getActiveBody().getColor());
-			if(sectionsTilNextLevel>0) sectionsTilNextLevel--;
-		} else {
-			TextUtils.growl(Arrays.asList("Wrong color.  You need to eat " + activeBody.getColor().name + " food"));
-			sectionsTilNextLevel++;	
-			bodyList.add(new SnakeBody(food.getColor()));
-		}		
+		}
+
 		Game.room.removeDrawable(food);
 	}
 
@@ -189,7 +225,9 @@ public class Snake extends ImageDrawable {
 	@Override
 	public void postDraw(Context2d context) {
 		head.draw(context);
-		for(SnakeBody body : bodyList) body.draw(context);
+		for(SnakeBody body : getBodyParts()) {
+			body.draw(context);
+		}
 		tail.draw(context);	
 	}
 	

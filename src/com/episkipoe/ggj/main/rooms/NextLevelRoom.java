@@ -14,6 +14,6 @@ public class NextLevelRoom extends Room {
 	}
 	
 	public void onEnter() {
-		Main.level++;
+		Main.gotoLevel(Main.level+1);
 	}
 }

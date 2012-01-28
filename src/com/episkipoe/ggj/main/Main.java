@@ -14,4 +14,15 @@ public class Main implements EntryPoint {
 	public void onModuleLoad() {
 		Game.begin(new GameStorage());
 	}
+	
+	public static void gotoLevel(int newLevel) {
+		level = newLevel;
+		GameRoom room=null;
+		try {
+			room = (GameRoom)Game.getRoom(GameRoom.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if(room != null) room.reset();
+	}
 }

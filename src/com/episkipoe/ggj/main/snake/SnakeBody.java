@@ -13,12 +13,12 @@ public class SnakeBody extends ImageDrawable {
 	public Point previousMove;
 	
 	private Food food=null;
-	public boolean full() { return (food != null); }
 	
 	public SnakeBody() { 
 		setFilename("SnakeBody.png");
 		color = Color.getRandomColor();
 	}
+	
 	public SnakeBody(Color color) {
 		setFilename("SnakeBody.png");
 		this.color = color;
@@ -30,8 +30,10 @@ public class SnakeBody extends ImageDrawable {
 	public boolean colorMatches(Food food) {
 		return food.getColor().equals(color);
 	}
+	
 	public void eat(Food food) {
-		if(colorMatches(food)) this.food = food;
+		if(colorMatches(food)) 
+		this.food = food;
 	}
 	public void postDraw(Context2d context) {
 		if(food != null) {

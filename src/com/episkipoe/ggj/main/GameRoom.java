@@ -37,8 +37,10 @@ public class GameRoom extends Room {
 		String msg = "Level " + Main.level;
 		TextUtils.drawWhiteText(context, Arrays.asList(msg), new Point(50,100));
 		
-		msg = "Meals until you can eat your tail: " + snake.getSectionsTilNextLevel();
+		/*
+		msg = "Meals until you eat your tail: " + snake.getSectionsTilNextLevel();
 		TextUtils.drawWhiteText(context, Arrays.asList(msg), new Point(50,120));
+		*/
 	}
 	
 	@Override
