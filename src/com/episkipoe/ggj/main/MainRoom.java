@@ -2,6 +2,7 @@ package com.episkipoe.ggj.main;
 
 import java.util.Arrays;
 
+import com.episkipoe.common.Game;
 import com.episkipoe.common.Point;
 import com.episkipoe.common.draw.TextUtils;
 import com.episkipoe.common.interact.BackgroundAction;
@@ -13,10 +14,12 @@ public class MainRoom extends Room {
 		setBackground("Main.png");
 		addDrawable(new BackgroundAction(new Point(276,116), new Point(491, 165), new ClickLogo()));
 	}
+	
 	private class ClickLogo implements Runnable {
 		@Override public void run() {
 			TextUtils.growl(Arrays.asList("Welcome"));
 			SoundUtils.play("victory.wav");
+			Game.switchRoom(GameRoom.class);
 		}
 	}
 	

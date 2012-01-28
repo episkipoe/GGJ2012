@@ -7,7 +7,7 @@ public class GameStorage implements com.episkipoe.common.GameStorage {
 
 	@Override
 	public String[] getCommonImages() {
-		String[] imgs = {"Main.png"};
+		String[] imgs = {"Main.png", "SnakeHead.png", "SnakeTail.png", "SnakeTail.png"};
 		return imgs;
 	}
 
@@ -30,6 +30,7 @@ public class GameStorage implements com.episkipoe.common.GameStorage {
 	@Override
 	public void startup() throws Exception {
 		Game.registerRoom(MainRoom.class, new MainRoom());
+		Game.registerRoom(GameRoom.class, new GameRoom());
 		if(!loadGame()) newGame(); 
 	}
 
