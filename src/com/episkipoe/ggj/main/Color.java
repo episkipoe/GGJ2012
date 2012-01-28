@@ -18,7 +18,7 @@ public class Color {
 			case 0: return new Color("Red", "rgba(255,0,0,1)");
 			case 1: return new Color("Green", "rgba(0,255,0,1)");
 			case 2: return new Color("Blue", "rgba(0,0,255,1)");
-			case 3: return new Color("Cyan", "rgba(255,255,0,1)");
+			case 3: return new Color("Orange", "rgba(229,153,44,1)");
 			case 4: return new Color("Magenta", "rgba(255,0,255,1)");
 			case 5: return new Color("Yellow", "rgba(255,255,0,1)");
 		}
