@@ -1,5 +1,6 @@
 package com.episkipoe.ggj.main;
 
+import com.episkipoe.common.Game;
 import com.episkipoe.common.rooms.Room;
 import com.episkipoe.ggj.main.food.Egg;
 import com.episkipoe.ggj.main.snake.Snake;
@@ -8,6 +9,7 @@ import com.google.gwt.user.client.Timer;
 
 public class GameRoom extends Room {
 	private Timer timer;
+	private Snake snake;
 	public GameRoom() { 
 		timer = new Timer() {
 	    	@Override public void run() {
@@ -15,8 +17,9 @@ public class GameRoom extends Room {
 	    		timer.schedule(1000+2000*Random.nextInt(4));
 	    	}
 		};
-		addDrawable(new Snake());
-		
+		snake = new Snake();
+		Game.setKeypressHandler(new SnakeKeyboardHandler(snake));
+		addDrawable(snake);
 	}
 
 	@Override
