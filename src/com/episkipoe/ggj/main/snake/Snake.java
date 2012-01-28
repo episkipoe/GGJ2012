@@ -11,6 +11,7 @@ import com.episkipoe.common.draw.ImageDrawable;
 import com.episkipoe.common.draw.TextUtils;
 import com.episkipoe.ggj.main.Color;
 import com.episkipoe.ggj.main.Main;
+import com.episkipoe.ggj.main.bonus.Bonus;
 import com.episkipoe.ggj.main.food.Food;
 import com.episkipoe.ggj.main.rooms.GameOverRoom;
 import com.episkipoe.ggj.main.rooms.NextLevelRoom;
@@ -127,17 +128,27 @@ public class Snake extends ImageDrawable {
 			TextUtils.growl(Arrays.asList("Don't eat your middle"));
 			return;
 		}
-		if(d instanceof SnakeTail) {
+		else if(d instanceof SnakeTail) {
 			handleEatingTail(); 
 			return;
 		}
-		if(d instanceof Food) {
+		else if(d instanceof Food) {
 			Food f = (Food) d;
 			handleEatingFood(f); 
 			return;
 		}
+		else if(d instanceof Bonus) {
+			Bonus b = (Bonus) d;
+			handleEatingBonus(b);
+			return;
+		}
 		
 		//Obstacle, etc?
+	}
+
+	private void handleEatingBonus(Bonus b) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	/**
