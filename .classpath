@@ -7,6 +7,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="lib" path="/home/dbennett/MiscCode/GWT/GGJ2012/war/WEB-INF/lib/gwt-voices-2.1.6.jar"/>
-	<classpathentry kind="lib" path="/home/dbennett/MiscCode/GWT/gwt-utils/target/gwt-utils-1.0-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="/home/dbennett/MiscCode/GWT/gwt-utils/target/gwt-utils-1.0-SNAPSHOT.jar" sourcepath="/home/dbennett/MiscCode/GWT/gwt-utils/target/gwt-utils-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -28,15 +28,25 @@ public class GameRoom extends Room {
 		Game.setMouseMode(new SnakeMouseMode(snake));
 		addDrawable(snake);
 	}
+	
+	public void reset() {
+		snake.reset();
+	}
 
-	@Override
-	public void postDraw(Context2d context) {
+	private void drawHUD(Context2d context) {
 		String msg = "Level " + Main.level;
 		TextUtils.drawWhiteText(context, Arrays.asList(msg), new Point(50,100));
 		
 		msg = "Meals until you can eat your tail: " + snake.getSectionsTilNextLevel();
 		TextUtils.drawWhiteText(context, Arrays.asList(msg), new Point(50,120));
+	}
+	
+	@Override
+	public void postDraw(Context2d context) {
+		drawHUD(context);
+		if(Main.paused) return;
 		
+		snake.checkForSelfCollision();
 		for(Drawable d : getDrawables()) {
 			snake.interactWith(d);
 		}
@@ -52,7 +62,4 @@ public class GameRoom extends Room {
 	public void onExit() {
 		foodSpawnTimer.cancel();
 	}
-	
-	@Override
-	public boolean showHud() { return false; }
 }

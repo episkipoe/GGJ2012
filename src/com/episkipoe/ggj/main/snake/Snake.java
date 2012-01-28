@@ -14,7 +14,6 @@ import com.episkipoe.ggj.main.food.Food;
 import com.episkipoe.ggj.main.rooms.GameOverRoom;
 import com.episkipoe.ggj.main.rooms.NextLevelRoom;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.dom.client.ImageElement;
 import com.google.gwt.user.client.Timer;
 
 public class Snake extends ImageDrawable {
@@ -41,13 +40,13 @@ public class Snake extends ImageDrawable {
 	 */
 	public void reset() {
 		bodyList.clear();
-		sectionsTilNextLevel = 4 + Main.level*2;
-		ImageElement img = getImageElement();
-		int width = 16;
-		if(img != null) width = img.getWidth();
+		sectionsTilNextLevel = 5 + Main.level*2;
+		int width = new SnakeBody().getWidth();
+		if(width<=0) width = 64; 
 		int x = width*sectionsTilNextLevel;
 		int y = (int) (Game.canvasHeight*0.5);
 		setLocation(new Point(x, y));
+		head.setLocation(getLocation());
 		for(int i = 0; i < sectionsTilNextLevel; i++) {
 			x-=width;
 			SnakeBody body = new SnakeBody();
@@ -57,9 +56,10 @@ public class Snake extends ImageDrawable {
 		x-=width;
 		tail.setLocation(new Point(x,y));
 		head.setColor(getActiveBody().getColor());
+		System.out.println("reset: " + getActiveBody().getColor().name);
 	}
 
-	public static final int moveDistance=20;
+	public static final int moveDistance=64;
 	Point moveLeft = new Point(-moveDistance, 0);
 	Point moveRight = new Point(moveDistance, 0);
 	Point moveUp = new Point(0, -moveDistance);
@@ -74,20 +74,47 @@ public class Snake extends ImageDrawable {
 	public void moveDown() { nextMove=moveDown; }
 	public void moveLeft() { nextMove=moveLeft; }
 	public void moveRight() { nextMove=moveRight; }
-	
-	public void move() {
+
+	@SuppressWarnings("unused")
+	private void followMove() {
+		if(nextMove==null) return ;
+		Point moveVector = head.previousMove;
+		Point newLoc = getLocation().add(nextMove);
+		setLocation(newLoc);
+		head.setLocation(newLoc);
+		head.previousMove=nextMove;
+		for(SnakeBody body : bodyList) {
+			if(moveVector != null) {
+				newLoc =  body.getLocation().add(moveVector);
+				body.setLocation(newLoc);
+			}
+			Point tmpMove=body.previousMove;
+			body.previousMove=moveVector;
+			moveVector = tmpMove;
+		}
+		if(moveVector != null) {
+			newLoc =  tail.getLocation().add(moveVector);
+			tail.setLocation(newLoc);
+		}
+	}
+	private void shiftMove() { 
 		if(nextMove==null) return ;
 		Point nextLoc = getLocation();
 		Point newLoc = getLocation().add(nextMove);
 		setLocation(newLoc);
 		head.setLocation(newLoc);
+
 		for(SnakeBody body : bodyList) {
 			newLoc = nextLoc;
 			nextLoc = body.getLocation();
 			body.setLocation(newLoc);
 		}
-		tail.setLocation(nextLoc);
-		nextMove=null;
+		tail.setLocation(nextLoc);		
+	}
+	public void move() {
+		if(Main.paused) return;
+		shiftMove();
+		//nextMove=null;		
 	}
 	
 	public void eat(Drawable d) {
@@ -140,7 +167,7 @@ public class Snake extends ImageDrawable {
 			head.setColor(getActiveBody().getColor());
 			if(sectionsTilNextLevel>0) sectionsTilNextLevel--;
 		} else {
-			TextUtils.growl(Arrays.asList("Wrong color"));
+			TextUtils.growl(Arrays.asList("Wrong color.  You need to eat " + activeBody.getColor().name + " food"));
 			sectionsTilNextLevel++;	
 			bodyList.add(new SnakeBody(food.getColor()));
 		}		
@@ -164,6 +191,17 @@ public class Snake extends ImageDrawable {
 		head.draw(context);
 		for(SnakeBody body : bodyList) body.draw(context);
 		tail.draw(context);	
+	}
+	
+	public void checkForSelfCollision() {
+		int sectionIdx=0;
+		for(SnakeBody body : bodyList) {
+			sectionIdx++;
+			if(sectionIdx<=2)continue;
+			if(body.intersectsWith(head)) {
+				eat(body); 
+			}
+		}
 	}
 	
 	public void interactWith(Drawable d) {

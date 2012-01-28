@@ -33,6 +33,7 @@ public class SnakeMouseMode extends MouseMode {
 				}	
 				snake.setNextMove(new Point(moveX, moveY));
 				try {
+					System.out.println("click");
 					Game.click(loc);
 				} catch (Exception e) {
 					e.printStackTrace();

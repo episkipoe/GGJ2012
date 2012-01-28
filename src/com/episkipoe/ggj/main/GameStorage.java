@@ -8,7 +8,7 @@ public class GameStorage implements com.episkipoe.common.GameStorage {
 
 	@Override
 	public String[] getCommonImages() {
-		String[] imgs = {"Main.png", "SnakeHead.png", "SnakeTail.png", "SnakeTail.png",
+		String[] imgs = {"Loading.png", "Main.png", "SnakeHead.png", "SnakeBody.png", "SnakeTail.png",
 		"BlueEgg.png", "CyanEgg.png", "Egg.png", "GreenEgg.png", "MagentaEgg.png", "RedEgg.png", "YellowEgg.png"
 	};
 		return imgs;

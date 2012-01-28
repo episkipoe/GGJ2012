@@ -10,6 +10,7 @@ import com.google.gwt.dom.client.ImageElement;
 public class SnakeBody extends ImageDrawable {
 	private Color color;
 	public Color getColor() { return color; }
+	public Point previousMove;
 	
 	private Food food=null;
 	public boolean full() { return (food != null); }

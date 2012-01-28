@@ -7,6 +7,7 @@ import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.dom.client.ImageElement;
 
 public class SnakeHead extends ImageDrawable {
+	public Point previousMove;
 	public SnakeHead() { 
 		setFilename("SnakeHead.png");
 	}

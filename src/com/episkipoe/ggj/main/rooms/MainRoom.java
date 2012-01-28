@@ -12,6 +12,11 @@ import com.episkipoe.ggj.main.GameRoom;
 
 public class MainRoom extends Room {
 	public MainRoom() {
+		setBackground("Loading.png");
+	}
+
+	@Override
+	public void onLoad() {
 		setBackground("Main.png");
 		addDrawable(new BackgroundAction(new Point(0,0), new Point(Game.canvasWidth, Game.canvasHeight), new ClickLogo()));
 	}
@@ -23,7 +28,4 @@ public class MainRoom extends Room {
 			Game.switchRoom(GameRoom.class);
 		}
 	}
-	
-	@Override
-	public boolean showHud() { return false; }
 }

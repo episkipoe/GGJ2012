@@ -8,6 +8,7 @@ import com.google.gwt.core.client.EntryPoint;
  */
 public class Main implements EntryPoint {
 	public static int level=0;
+	public static boolean paused=false; 
 	
 	@Override
 	public void onModuleLoad() {
