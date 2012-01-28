@@ -1,0 +1,7 @@
+.settings/com.google.appengine.eclipse.core.prefs
+.classpath
+.settings/com.google.gwt.eclipse.core.prefs
+.settings/com.google.gdt.eclipse.appsmarketplace.prefs
+gwt-unitCache/*
+test-classes/*
+war/*

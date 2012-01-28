@@ -127,11 +127,11 @@ public class Snake extends ImageDrawable {
 			TextUtils.growl(Arrays.asList("Don't eat your middle"));
 			return;
 		}
-		if(d instanceof SnakeTail) { 
+		if(d instanceof SnakeTail) {
 			handleEatingTail(); 
 			return;
 		}
-		if(d instanceof Food) { 
+		if(d instanceof Food) {
 			Food f = (Food) d;
 			handleEatingFood(f); 
 			return;
