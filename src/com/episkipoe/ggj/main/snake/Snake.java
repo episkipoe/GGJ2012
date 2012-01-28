@@ -104,7 +104,7 @@ public class Snake extends ImageDrawable {
 	private void shiftMove() { 
 		if(nextMove==null) return ;
 		Point nextLoc = getLocation();
-		Point newLoc = getLocation().add(nextMove);
+		Point newLoc = applyMovementToPoint(getLocation(), nextMove);
 		setLocation(newLoc);
 		head.setLocation(newLoc);
 
@@ -115,6 +115,16 @@ public class Snake extends ImageDrawable {
 		}
 		tail.setLocation(nextLoc);		
 	}
+	
+	private Point applyMovementToPoint(Point location, Point moveVector) {
+		Point newLocation = location.add(nextMove);
+		if(newLocation.x < 0) newLocation.x = Game.canvasWidth;
+		if(newLocation.x > Game.canvasWidth) newLocation.x = 0;
+		if(newLocation.y < 0) newLocation.y = Game.canvasHeight;
+		if(newLocation.y > Game.canvasHeight) newLocation.y = 0;	
+		return newLocation;
+	}
+	
 	public void move() {
 		if(Main.paused) return;
 		shiftMove();

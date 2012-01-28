@@ -19,14 +19,20 @@ public class GameRoom extends Room {
 	public GameRoom() { 
 		foodSpawnTimer = new Timer() {
 	    	@Override public void run() {
-	    		addDrawable(new Egg());
 	    		foodSpawnTimer.schedule(1000+2000*Random.nextInt(4));
+	    		if(!(Game.room instanceof GameRoom)) {
+	    			return ;
+	    		}
+	    		addDrawable(new Egg());
+	    		if(Random.nextBoolean()) addDrawable(new Egg());
 	    	}
 		};
 		snake = new Snake();
+		snake.reset();
 		Game.setKeypressHandler(new SnakeKeyboardHandler(snake));
 		Game.setMouseMode(new SnakeMouseMode(snake));
 		addDrawable(snake);
+		foodSpawnTimer.schedule(1000);	
 	}
 	
 	public void reset() {
@@ -55,13 +61,8 @@ public class GameRoom extends Room {
 	}
 
 	@Override
-	public void onEnter() {
-		foodSpawnTimer.schedule(1000);	
-		snake.reset();
-	}
+	public void onEnter() { }
 	
 	@Override
-	public void onExit() {
-		foodSpawnTimer.cancel();
-	}
+	public void onExit() { }
 }
