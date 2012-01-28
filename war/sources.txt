@@ -1,1 +1,5 @@
-http://www.freesound.org/people/RunnerPack/sounds/87042/
+victory.wav
+	http://www.freesound.org/people/RunnerPack/sounds/87042/
+
+favicon.ico
+	http://www.favicon.cc/?action=icon&file_id=225373
