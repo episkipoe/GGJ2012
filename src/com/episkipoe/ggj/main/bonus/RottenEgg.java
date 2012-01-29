@@ -10,6 +10,7 @@ public class RottenEgg extends Bonus {
 	int finalY;
 	
 	public RottenEgg() {
+		setFilename("RottenEgg.png");
 		if(getImageElement() == null) return;
 		
 		speedX=Random.nextInt(10)+5;

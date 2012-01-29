@@ -11,6 +11,7 @@ public class GameStorage implements com.episkipoe.common.GameStorage {
 		"SnakeHead-Right.png", "SnakeHead-Right-Open.png", "SnakeHead-Down.png", "SnakeHead-Up.png",
 		"SnakeBody-Horizontal.png", "SnakeBody-Vertical.png", 
 		"SnakeTail-Left.png", "SnakeTail-Right.png",
+		"GoldenEgg.png", "RottenEgg.png",
 		"BlueEgg.png", "OrangeEgg.png", "GreenEgg.png", "MagentaEgg.png", "RedEgg.png", "YellowEgg.png"
 	};
 

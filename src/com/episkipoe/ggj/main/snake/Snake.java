@@ -50,7 +50,8 @@ public class Snake extends ImageDrawable {
 	 */
 	public void reset() {
 		bodyList.clear();
-		sectionsTilNextLevel = 1 + (Main.level-1)*2;
+		sectionsTilNextLevel = 1 + (Main.level-1);
+		if(sectionsTilNextLevel>10) sectionsTilNextLevel = 10;
 		//int width = new SnakeBody().getWidth();
 		int width = 33; //Some overlap
 		int x = (width*sectionsTilNextLevel)+100;
@@ -129,6 +130,17 @@ public class Snake extends ImageDrawable {
 	}
 	private void shiftMove() { 
 		if(nextMove==null) return ;
+		if(bodyList.size()>2) {
+			if(head.getFilename().contains("Up") && nextMove.equals(moveDown)) {
+				nextMove=moveUp;
+			} else if(head.getFilename().contains("Down") && nextMove.equals(moveUp)) {
+				nextMove=moveDown;
+			} else if(head.getFilename().contains("Left") && nextMove.equals(moveRight)) {
+				nextMove=moveLeft;
+			} else if(head.getFilename().contains("Right") && nextMove.equals(moveLeft)) {
+				nextMove=moveRight;
+			}
+		}
 		Point nextLoc = getLocation();
 		Point newLoc = applyMovementToPoint(getLocation(), nextMove);
 		setLocation(newLoc);
@@ -187,10 +199,10 @@ public class Snake extends ImageDrawable {
 	public void move() {
 		if(!GameRoom.inside() || Main.paused) return;
 		if(bodyList.isEmpty()) {
-			movementDelay = 500;
+			movementDelay = 100;
 		} else {
 			movementDelay = 100*getNonMatchingBlocks();
-			if(movementDelay<=0) movementDelay = 500;
+			if(movementDelay<=0) movementDelay = 100;
 		}
 		if(bodyList.size() > 15) {
 			Game.switchRoom(GameOverRoom.class);

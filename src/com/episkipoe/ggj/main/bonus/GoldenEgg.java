@@ -10,6 +10,7 @@ public class GoldenEgg extends Bonus {
 	int finalY;
 	
 	public GoldenEgg() {
+		setFilename("GoldenEgg.png");
 		if(getImageElement() == null) return;
 		
 		speedX=Random.nextInt(10)+5;

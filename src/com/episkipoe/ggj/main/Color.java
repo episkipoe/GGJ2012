@@ -11,8 +11,9 @@ public class Color {
 	}
 
 	public static Color getRandomColor() {
-		int numColors=2+Main.level;
+		int numColors=1+Main.level;
 		if(numColors>6) numColors=6;
+
 		switch(Random.nextInt(numColors)) {
 			default: //Fallthrough
 			case 0: return new Color("Red", "rgba(255,0,0,1)");
