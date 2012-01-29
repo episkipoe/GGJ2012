@@ -12,6 +12,15 @@ public class Egg extends Food {
 	
 	public Egg() {
 		color = Color.getRandomColor();
+		reset();
+	}
+	
+	public Egg(Color c) {
+		color = c;
+		reset();
+	}
+	
+	private void reset() {
 		setFilename(color.name + "Egg.png");
 
 		if(getImageElement() == null) return;

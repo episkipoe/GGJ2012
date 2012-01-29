@@ -12,6 +12,9 @@ import com.episkipoe.common.draw.TextUtils;
 import com.episkipoe.ggj.main.Color;
 import com.episkipoe.ggj.main.Main;
 import com.episkipoe.ggj.main.bonus.Bonus;
+import com.episkipoe.ggj.main.bonus.GoldenEgg;
+import com.episkipoe.ggj.main.bonus.RottenEgg;
+import com.episkipoe.ggj.main.food.Egg;
 import com.episkipoe.ggj.main.food.Food;
 import com.episkipoe.ggj.main.rooms.GameOverRoom;
 import com.episkipoe.ggj.main.rooms.NextLevelRoom;
@@ -147,18 +150,28 @@ public class Snake extends ImageDrawable {
 			handleEatingFood(f); 
 			return;
 		}
-		else if(d instanceof Bonus) {
+		else if(d instanceof GoldenEgg) {
 			Bonus b = (Bonus) d;
-			handleEatingBonus(b);
+			handleEatingGoldenEgg(b);
+			return;
+		}
+		else if(d instanceof RottenEgg) {
+			Bonus b = (Bonus) d;
+			handleEatingRottenEgg(b);
 			return;
 		}
 		
 		//Obstacle, etc?
 	}
 
-	private void handleEatingBonus(Bonus b) {
-		// TODO Auto-generated method stub
-		
+	private void handleEatingGoldenEgg(Bonus b) {
+		handleEatingFood(new Egg(bodyList.get(bodyList.size()-1).getColor()));
+		Game.room.removeDrawable(b);
+	}
+	
+	private void handleEatingRottenEgg(Bonus b) {
+		bodyList.remove(bodyList.size()-1);
+		Game.room.removeDrawable(b);
 	}
 
 	/**
@@ -219,6 +232,12 @@ public class Snake extends ImageDrawable {
 		setLocation(newLoc);
 		head.setLocation(newLoc);
 	
+		completeSequence();
+
+		Game.room.removeDrawable(food);
+	}
+	
+	private void completeSequence() {
 		if(sequenceComplete()) {
 			removeSequence();
 			if(bodyList.isEmpty()) {
@@ -227,8 +246,6 @@ public class Snake extends ImageDrawable {
 			}	
 			head.setColor(getActiveBody().getColor());
 		}
-
-		Game.room.removeDrawable(food);
 	}
 
 	/**

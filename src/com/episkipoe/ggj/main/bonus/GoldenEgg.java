@@ -5,11 +5,11 @@ import com.episkipoe.common.Point;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.user.client.Random;
 
-public class Mouse extends Bonus {
+public class GoldenEgg extends Bonus {
 	int speedX, speedY;
-	int finalY;	
+	int finalY;
 	
-	public Mouse() {
+	public GoldenEgg() {
 		if(getImageElement() == null) return;
 		
 		speedX=Random.nextInt(10)+5;
