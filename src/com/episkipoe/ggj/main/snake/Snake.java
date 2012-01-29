@@ -131,7 +131,10 @@ public class Snake extends ImageDrawable {
 	
 	public void move() {
 		if(Main.paused) return;
-		movementDelay = 2000/bodyList.size();
+		movementDelay = 100*bodyList.size();
+		if(bodyList.size() > 15){
+			//lose
+		}
 		shiftMove();
 		//nextMove=null;		
 	}
