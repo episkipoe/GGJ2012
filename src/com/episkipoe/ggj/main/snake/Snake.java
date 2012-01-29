@@ -188,8 +188,9 @@ public class Snake extends ImageDrawable {
 	
 	int getNonMatchingBlocks() {
 		Color colorToCheck=getActiveBody().getColor();
+		if (colorToCheck == null) return 0;
 		int count=0;
-		for(SnakeBody body: getBodyParts()) {	
+		for(SnakeBody body: getBodyParts().subList(0,3)) {
 			if(body.getColor().equals(colorToCheck)) continue;
 			count++;
 		}
@@ -198,11 +199,8 @@ public class Snake extends ImageDrawable {
 	
 	public void move() {
 		if(!GameRoom.inside() || Main.paused) return;
-		if(0 == getNonMatchingBlocks()) {
-			movementDelay = 100;
-		} else {
-			movementDelay = 100+25*getNonMatchingBlocks() * Math.sqrt(Main.level);
-		}
+	    movementDelay += 25*getNonMatchingBlocks() * Math.sqrt(Main.level);
+	    
 		if(bodyList.size() > 15) {
 			Game.switchRoom(GameOverRoom.class);
 			TextUtils.growl(Arrays.asList("You grew too large!"));
