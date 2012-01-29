@@ -213,7 +213,7 @@ public class Snake extends ImageDrawable {
 		if(d==null) return;
 		if(d instanceof SnakeBody) {
 			Game.switchRoom(GameOverRoom.class);
-			TextUtils.growl(Arrays.asList("Don't eat your middle"));
+			//TextUtils.growl(Arrays.asList("Don't eat your middle"));
 			return;
 		}
 		else if(d instanceof SnakeTail) {
