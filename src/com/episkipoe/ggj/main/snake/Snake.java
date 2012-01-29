@@ -27,19 +27,20 @@ public class Snake extends ImageDrawable {
 	private List<SnakeBody> bodyList = new ArrayList<SnakeBody>();
 	
 	private int sequenceToClear=3;
+	private int movementDelay =500;
 	
 	private int sectionsTilNextLevel=4;
 	public int getSectionsTilNextLevel() { return sectionsTilNextLevel; }
 	
 	Timer moveTimer;
-	public Snake() { 
+	public Snake() {
 		moveTimer = new Timer() {
 	    	@Override public void run() {
 	    		move();
-	    		moveTimer.schedule(500);
+	    		moveTimer.schedule(movementDelay);
 	    	}
 		};
-		moveTimer.schedule(500);
+		moveTimer.schedule(movementDelay);
 	}
 
 	/**
@@ -130,6 +131,7 @@ public class Snake extends ImageDrawable {
 	
 	public void move() {
 		if(Main.paused) return;
+		movementDelay = 2000/bodyList.size();
 		shiftMove();
 		//nextMove=null;		
 	}
