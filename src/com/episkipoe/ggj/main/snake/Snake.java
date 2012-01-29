@@ -9,6 +9,7 @@ import com.episkipoe.common.Point;
 import com.episkipoe.common.draw.Drawable;
 import com.episkipoe.common.draw.ImageDrawable;
 import com.episkipoe.common.draw.TextUtils;
+import com.episkipoe.common.sound.SoundUtils;
 import com.episkipoe.ggj.main.Color;
 import com.episkipoe.ggj.main.GameRoom;
 import com.episkipoe.ggj.main.Main;
@@ -173,14 +174,25 @@ public class Snake extends ImageDrawable {
 		return newLocation;
 	}
 	
+	int getNonMatchingBlocks() {
+		Color colorToCheck=getActiveBody().getColor();
+		int count=0;
+		for(SnakeBody body: getBodyParts()) {	
+			if(body.getColor().equals(colorToCheck)) continue;
+			count++;
+		}
+		return count;
+	}
+	
 	public void move() {
 		if(!GameRoom.inside() || Main.paused) return;
 		if(bodyList.isEmpty()) {
 			movementDelay = 500;
 		} else {
-			movementDelay = 100*bodyList.size();
+			movementDelay = 100*getNonMatchingBlocks();
+			if(movementDelay<=0) movementDelay = 500;
 		}
-		if(bodyList.size() > 15){
+		if(bodyList.size() > 15) {
 			Game.switchRoom(GameOverRoom.class);
 			TextUtils.growl(Arrays.asList("You grew too large!"));
 		}
@@ -234,6 +246,7 @@ public class Snake extends ImageDrawable {
 	 */
 	private void handleEatingTail() {
 		if(sectionsTilNextLevel<=0) {
+			SoundUtils.play("fanfare.wav");
 			Game.switchRoom(NextLevelRoom.class);
 		}
 	}
@@ -296,6 +309,7 @@ public class Snake extends ImageDrawable {
 		if(sequenceComplete()) {
 			removeSequence();
 			if(bodyList.isEmpty()) {
+				SoundUtils.play("fanfare.wav");
 				Game.switchRoom(NextLevelRoom.class);
 				return;
 			}	
@@ -334,13 +348,25 @@ public class Snake extends ImageDrawable {
 			}
 		}
 	}
-	
+
+	private Rectangle getHeadBox() {
+		Rectangle headBox = new Rectangle(head.getBoundingBox());
+		if(head.getFilename().contains("Up")||
+		head.getFilename().contains("Down")) {
+			headBox.left+=10;
+			headBox.right-=10;
+		} else {
+			headBox.bottom+=10;
+			headBox.top-=10;	
+		} 
+		return headBox;
+	}
 	public void interactWith(Drawable d) {
 		if(d==null) return ;
 		if(d instanceof Snake) return;
 		if(!(d instanceof ImageDrawable)) return;
 		ImageDrawable img = (ImageDrawable) d;  
-		if(head.intersectsWith(img)) eat(d);
+		if(img.intersectsWith(getHeadBox())) eat(d);
 		for(SnakeBody body : bodyList) if(body.intersectsWith(img)) getHitBy(body, d);
 	}
 	

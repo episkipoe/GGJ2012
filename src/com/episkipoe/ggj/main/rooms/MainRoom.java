@@ -24,7 +24,7 @@ public class MainRoom extends Room {
 	
 	private class ClickLogo implements Runnable {
 		@Override public void run() {
-			SoundUtils.play("victory.wav");
+			SoundUtils.play("level.wav");
 			Game.switchRoom(GameRoom.class);
 		}
 	}
