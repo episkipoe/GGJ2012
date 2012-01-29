@@ -36,6 +36,9 @@ public class GameStorage implements com.episkipoe.common.GameStorage {
 		Game.registerRoom(GameRoom.class, new GameRoom());
 		Game.registerRoom(GameOverRoom.class, new GameOverRoom());
 		Game.registerRoom(NextLevelRoom.class, new NextLevelRoom());
+		Game.registerRoom(CreditRoom.class, new CreditRoom());
+		Game.registerRoom(HowToPlay.class, new HowToPlay());
+		Game.registerRoom(OptionRoom.class, new OptionRoom());
 		if(!loadGame()) newGame(); 
 	}
 
