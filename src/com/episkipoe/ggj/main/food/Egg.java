@@ -3,6 +3,7 @@ package com.episkipoe.ggj.main.food;
 import com.episkipoe.common.Game;
 import com.episkipoe.common.Point;
 import com.episkipoe.ggj.main.Color;
+import com.episkipoe.ggj.main.Main;
 import com.google.gwt.canvas.dom.client.Context2d;
 import com.google.gwt.user.client.Random;
 
@@ -10,16 +11,14 @@ public class Egg extends Food {
 	int speedX, speedY;
 	int finalY;	
 	
-	public Egg() {
-		color = Color.getRandomColor();
+	public Egg(Color color) {
+		this.color = color;
+		if(color==null) {
+			System.out.println("WARNING:  creating egg with null color");
+		}
 		reset();
 	}
-	
-	public Egg(Color c) {
-		color = c;
-		reset();
-	}
-	
+
 	private void reset() {
 		setFilename(color.name + "Egg.png");
 
@@ -43,7 +42,7 @@ public class Egg extends Food {
 
 	@Override
 	public void postDraw(Context2d context) {
-		if(eaten) return;
+		if(eaten || Main.paused) return;
 		if(getLocation().y > Game.canvasHeight) {
 			Game.room.removeDrawable(this);
 			return;

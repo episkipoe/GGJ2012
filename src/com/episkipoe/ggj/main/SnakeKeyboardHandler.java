@@ -24,6 +24,8 @@ class SnakeKeyboardHandler implements KeyPressHandler {
 		} else if(event.getCharCode() == 'd'
 		|| event.getCharCode() == 'u') { 
 			snake.moveRight();
+		} else if(event.getCharCode() == 'p') {
+			Main.paused = !Main.paused;
 		} 
 	}
 

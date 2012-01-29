@@ -17,23 +17,24 @@ public class SnakeMouseMode extends MouseMode {
 			@Override
 			public void onMouseDown(MouseDownEvent event) {
 				Point loc = Game.getPointFromEvent(event);
-				Point snakeLoc = snake.getLocation();
-				float deltaX = loc.x - snakeLoc.x;
-				float deltaY = loc.y - snakeLoc.y;
-				float moveX=0, moveY=0;
-				if(deltaX > 50) {
-					moveX = Snake.moveDistance;
-				} else if(deltaX < -50) {
-					moveX = -Snake.moveDistance;
+				if(Game.room instanceof GameRoom) {
+					Point snakeLoc = snake.getLocation();
+					float deltaX = loc.x - snakeLoc.x;
+					float deltaY = loc.y - snakeLoc.y;
+					float moveX=0, moveY=0;
+					if(deltaX > 50) {
+						moveX = Snake.moveDistance;
+					} else if(deltaX < -50) {
+						moveX = -Snake.moveDistance;
+					}
+					if(deltaY > 50) {
+						moveY = Snake.moveDistance;
+					} else if(deltaY < -50) {
+						moveY = -Snake.moveDistance;
+					}	
+					snake.setNextMove(new Point(moveX, moveY));
 				}
-				if(deltaY > 50) {
-					moveY = Snake.moveDistance;
-				} else if(deltaY < -50) {
-					moveY = -Snake.moveDistance;
-				}	
-				snake.setNextMove(new Point(moveX, moveY));
 				try {
-					System.out.println("click");
 					Game.click(loc);
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import com.episkipoe.common.Game;
 import com.episkipoe.common.Point;
-import com.episkipoe.common.dialog.DialogElement;
 import com.episkipoe.common.draw.TextUtils;
 import com.episkipoe.common.interact.BackgroundDoor;
 import com.episkipoe.common.rooms.Room;

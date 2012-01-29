@@ -3,25 +3,36 @@ package com.episkipoe.ggj.main.snake;
 import com.episkipoe.common.Point;
 import com.episkipoe.common.draw.ImageDrawable;
 import com.episkipoe.ggj.main.Color;
+import com.episkipoe.ggj.main.food.Egg;
 import com.episkipoe.ggj.main.food.Food;
 import com.google.gwt.canvas.dom.client.Context2d;
-import com.google.gwt.dom.client.ImageElement;
 
 public class SnakeBody extends ImageDrawable {
 	private Color color;
 	public Color getColor() { return color; }
 	public Point previousMove;
 	
-	private Food food=null;
+	private Food food = null;
 	
 	public SnakeBody() { 
-		setFilename("SnakeBody.png");
+		setFilename("SnakeBody-Horizontal.png");
 		color = Color.getRandomColor();
+		food = new Egg(color);
+		food.eat();
 	}
 	
-	public SnakeBody(Color color) {
-		setFilename("SnakeBody.png");
-		this.color = color;
+	public SnakeBody(Food food) {
+		setFilename("SnakeBody-Horizontal.png");
+		this.food = food;
+		this.color = food.getColor();
+	}
+	
+	public void setMove(Point moveVector) {
+		if(moveVector.y > 1 || moveVector.y < -1) {
+			setFilename("SnakeBody-Vertical.png");
+		} else {
+			setFilename("SnakeBody-Horizontal.png");
+		}
 	}
 	
 	@Override
@@ -39,16 +50,7 @@ public class SnakeBody extends ImageDrawable {
 		if(food != null) {
 			food.setLocation(getLocation());
 			food.draw(context);
-		} else {
-			context.setFillStyle(color.value);
-			context.setGlobalAlpha(0.4);
-			Point loc = getLocation();
-			ImageElement img = getImageElement();
-			int width=img.getWidth();
-			int height=img.getHeight();
-			context.fillRect(loc.x-width*0.5, loc.y-height*0.5, width, height);
-			context.setGlobalAlpha(1.0);
-		}
+		} 
 	}
 
 }

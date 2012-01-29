@@ -1,16 +1,19 @@
 package com.episkipoe.ggj.main;
 
 import com.episkipoe.common.Game;
-import com.episkipoe.common.player.MovePlayer;
 import com.episkipoe.ggj.main.rooms.*;
 
 public class GameStorage implements com.episkipoe.common.GameStorage {
 
 	@Override
 	public String[] getCommonImages() {
-		String[] imgs = {"Loading.png", "Main.png", "SnakeHead.png", "SnakeBody.png", "SnakeTail.png", 
-		"BlueEgg.png", "OrangeEgg.png", "Egg.png", "GreenEgg.png", "MagentaEgg.png", "RedEgg.png", "YellowEgg.png"
+		String[] imgs = {"Loading.png", "Main.png", "SnakeHead-Left.png", "SnakeHead-Left-Open.png",
+		"SnakeHead-Right.png", "SnakeHead-Right-Open.png", "SnakeHead-Down.png", "SnakeHead-Up.png",
+		"SnakeBody-Horizontal.png", "SnakeBody-Vertical.png", 
+		"SnakeTail-Left.png", "SnakeTail-Right.png",
+		"BlueEgg.png", "OrangeEgg.png", "GreenEgg.png", "MagentaEgg.png", "RedEgg.png", "YellowEgg.png"
 	};
+
 		return imgs;
 	}
 
@@ -22,7 +25,6 @@ public class GameStorage implements com.episkipoe.common.GameStorage {
 	@Override
 	public void newGame() throws Exception {
 		Game.switchRoom(MainRoom.class);
-		Game.setMouseMode(new MovePlayer());
 	}
 
 	@Override

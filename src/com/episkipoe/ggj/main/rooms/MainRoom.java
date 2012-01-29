@@ -17,9 +17,9 @@ public class MainRoom extends Room {
 	public void onLoad() {
 		setBackground("Main.png");
 		addDrawable(new BackgroundAction(new Point(295,292), new Point(521, 340), new ClickLogo()));
-		addDrawable(new BackgroundDoor(new Point(295,347), new Point(521, 422), HowToPlay.class));
-		addDrawable(new BackgroundDoor(new Point(295,430), new Point(521, 479), OptionRoom.class));
-		addDrawable(new BackgroundDoor(new Point(295,495), new Point(521, 550), CreditRoom.class));
+		addDrawable(new BackgroundDoor(new Point(295,347), new Point(521, 413), HowToPlay.class));
+		addDrawable(new BackgroundDoor(new Point(295,420), new Point(521, 479), OptionRoom.class));
+		addDrawable(new BackgroundDoor(new Point(295,482), new Point(521, 550), CreditRoom.class));
 	}
 	
 	private class ClickLogo implements Runnable {

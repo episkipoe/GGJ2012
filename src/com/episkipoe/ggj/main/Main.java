@@ -7,7 +7,7 @@ import com.google.gwt.core.client.EntryPoint;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Main implements EntryPoint {
-	public static int level=1;
+	public static int level=2;
 	public static boolean paused=false; 
 	
 	@Override
@@ -16,6 +16,7 @@ public class Main implements EntryPoint {
 	}
 	
 	public static void gotoLevel(int newLevel) {
+		if(newLevel<=0) newLevel = 1;
 		level = newLevel;
 		GameRoom room=null;
 		try {

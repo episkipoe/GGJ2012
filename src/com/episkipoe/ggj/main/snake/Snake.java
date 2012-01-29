@@ -10,6 +10,7 @@ import com.episkipoe.common.draw.Drawable;
 import com.episkipoe.common.draw.ImageDrawable;
 import com.episkipoe.common.draw.TextUtils;
 import com.episkipoe.ggj.main.Color;
+import com.episkipoe.ggj.main.GameRoom;
 import com.episkipoe.ggj.main.Main;
 import com.episkipoe.ggj.main.bonus.Bonus;
 import com.episkipoe.ggj.main.bonus.GoldenEgg;
@@ -32,7 +33,7 @@ public class Snake extends ImageDrawable {
 	private int sectionsTilNextLevel=4;
 	public int getSectionsTilNextLevel() { return sectionsTilNextLevel; }
 	
-	Timer moveTimer;
+	private Timer moveTimer;
 	public Snake() {
 		moveTimer = new Timer() {
 	    	@Override public void run() {
@@ -48,26 +49,27 @@ public class Snake extends ImageDrawable {
 	 */
 	public void reset() {
 		bodyList.clear();
-		sectionsTilNextLevel = 1 + Main.level*2;
-		int width = new SnakeBody().getWidth();
-		if(width<=0) width = 64; 
-		int x = width*sectionsTilNextLevel;
+		sectionsTilNextLevel = 1 + (Main.level-1)*2;
+		//int width = new SnakeBody().getWidth();
+		int width = 33; //Some overlap
+		int x = (width*sectionsTilNextLevel)+100;
 		int y = (int) (Game.canvasHeight*0.5);
 		nextMove=moveRight;
 		setLocation(new Point(x, y));
 		head.setLocation(getLocation());
+		x-=32;
 		for(int i = 0; i < sectionsTilNextLevel; i++) {
 			x-=width;
 			SnakeBody body = new SnakeBody();
 			body.setLocation(new Point(x, y));
 			bodyList.add(body);
 		}
-		x-=width;
+		x-=85;
 		tail.setLocation(new Point(x,y));
 		head.setColor(getActiveBody().getColor());
 	}
 
-	public static final int moveDistance=64;
+	public static final int moveDistance=32;
 	Point moveLeft = new Point(-moveDistance, 0);
 	Point moveRight = new Point(moveDistance, 0);
 	Point moveUp = new Point(0, -moveDistance);
@@ -105,19 +107,61 @@ public class Snake extends ImageDrawable {
 			tail.setLocation(newLoc);
 		}
 	}
+	private Point adjustHeadLocation() {
+		Point currentLocation = getLocation();
+		Point headLoc = new Point(currentLocation.x, currentLocation.y);
+		int headAdjust = 32;
+		if(nextMove.x>1) {
+			headLoc.x += headAdjust;
+		} else if(nextMove.x<-1) {
+			headLoc.x -= headAdjust;
+		}
+		if(nextMove.y>1) {
+			headLoc.y += headAdjust;
+		} else if(nextMove.y<-1) {
+			headLoc.y -= headAdjust;
+		}	
+		if(head.getFilename().contains("Open")) {
+			headLoc.y-=20;
+		}
+		return headLoc;
+	}
 	private void shiftMove() { 
 		if(nextMove==null) return ;
 		Point nextLoc = getLocation();
 		Point newLoc = applyMovementToPoint(getLocation(), nextMove);
 		setLocation(newLoc);
-		head.setLocation(newLoc);
+		Point headLoc = adjustHeadLocation();
+		head.setLocation(headLoc);
+		head.setMove(nextMove);
 
+		Point previousMoveVector=null;
 		for(SnakeBody body : getBodyParts()) {
 			newLoc = nextLoc;
 			nextLoc = body.getLocation();
+			previousMoveVector=getMoveVectorFromPoints(nextLoc, newLoc);
+			body.setMove(previousMoveVector);
 			body.setLocation(newLoc);
 		}
+		tail.setMove(previousMoveVector);
+		int tailAdjustment=65;
+		if(tail.getFilename().equals("SnakeTail-Down.png")) {
+			nextLoc.y-=tailAdjustment;
+		} else if(tail.getFilename().equals("SnakeTail-Up.png")) {
+			nextLoc.y+=tailAdjustment;
+		} else if(tail.getFilename().equals("SnakeTail-Left.png")) {
+			nextLoc.x+=tailAdjustment;
+		} else if(tail.getFilename().equals("SnakeTail-Right.png")) {
+			nextLoc.x-=tailAdjustment;
+		}
 		tail.setLocation(nextLoc);		
+		
+		checkForSelfCollision();
+	}
+	private Point getMoveVectorFromPoints(Point prevPoint, Point newPoint) {
+		float deltaX=newPoint.x-prevPoint.x;
+		float deltaY=newPoint.y-prevPoint.y;
+		return new Point(deltaX,deltaY);
 	}
 	
 	private Point applyMovementToPoint(Point location, Point moveVector) {
@@ -130,8 +174,12 @@ public class Snake extends ImageDrawable {
 	}
 	
 	public void move() {
-		if(Main.paused) return;
-		movementDelay = 100*bodyList.size();
+		if(!GameRoom.inside() || Main.paused) return;
+		if(bodyList.isEmpty()) {
+			movementDelay = 500;
+		} else {
+			movementDelay = 100*bodyList.size();
+		}
 		if(bodyList.size() > 15){
 			Game.switchRoom(GameOverRoom.class);
 			TextUtils.growl(Arrays.asList("You grew too large!"));
@@ -225,12 +273,13 @@ public class Snake extends ImageDrawable {
 	}
 	
 	private void handleEatingFood(Food food) {
+		food.eat();
 		if(bodyList.isEmpty()) {
-			bodyList.add(new SnakeBody(food.getColor()));
+			bodyList.add(new SnakeBody(food));
 			return;
 		}
 		
-		SnakeBody newSegment = new SnakeBody(food.getColor());
+		SnakeBody newSegment = new SnakeBody(food);
 		newSegment.setLocation(head.getLocation());
 		head.setColor(food.getColor());
 		bodyList.add(newSegment);
@@ -277,10 +326,10 @@ public class Snake extends ImageDrawable {
 	
 	public void checkForSelfCollision() {
 		int sectionIdx=0;
-		for(SnakeBody body : bodyList) {
+		for(SnakeBody body : getBodyParts()) {
 			sectionIdx++;
 			if(sectionIdx<=2)continue;
-			if(body.intersectsWith(head)) {
+			if(body.intersectsWith(head.getLocation())) {
 				eat(body); 
 			}
 		}
