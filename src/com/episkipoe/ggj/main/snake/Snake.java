@@ -187,8 +187,8 @@ public class Snake extends ImageDrawable {
 	}
 	
 	int getNonMatchingBlocks() {
+		if(getActiveBody().size == 0) return 0;
 		Color colorToCheck=getActiveBody().getColor();
-		if (colorToCheck == null) return 0;
 		int count=0;
 		if(getBodyParts().size()<=3) return 0;
 		for(SnakeBody body: getBodyParts().subList(0,3)) {
