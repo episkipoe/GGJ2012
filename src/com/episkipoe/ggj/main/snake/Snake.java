@@ -198,11 +198,10 @@ public class Snake extends ImageDrawable {
 	
 	public void move() {
 		if(!GameRoom.inside() || Main.paused) return;
-		if(bodyList.isEmpty()) {
+		if(0 == getNonMatchingBlocks()) {
 			movementDelay = 100;
 		} else {
-			movementDelay = 100*getNonMatchingBlocks();
-			if(movementDelay<=0) movementDelay = 100;
+			movementDelay = 100+25*getNonMatchingBlocks() * Math.sqrt(Main.level);
 		}
 		if(bodyList.size() > 15) {
 			Game.switchRoom(GameOverRoom.class);
