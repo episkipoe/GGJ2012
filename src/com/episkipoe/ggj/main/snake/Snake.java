@@ -133,7 +133,8 @@ public class Snake extends ImageDrawable {
 		if(Main.paused) return;
 		movementDelay = 100*bodyList.size();
 		if(bodyList.size() > 15){
-			//lose
+			Game.switchRoom(GameOverRoom.class);
+			TextUtils.growl(Arrays.asList("You grew too large!"));
 		}
 		shiftMove();
 		//nextMove=null;		
